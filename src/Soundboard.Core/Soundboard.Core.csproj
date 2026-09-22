@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Soundboard.Core</RootNamespace>
+    <AssemblyName>Soundboard.Core</AssemblyName>
+    <Description>Config and hotkey models for the Soundboard tray app.</Description>
+  </PropertyGroup>
+</Project>
