@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "startMinimized": false,
+  "runAtStartup": false,
+  "globalVolume": 0.8,
+  "muted": false,
+  "hotkeyMode": "game",
+  "hotkeyBehavior": "restart",
+  "stopAllHotkey": {
+    "control": true,
+    "alt": false,
+    "shift": true,
+    "win": false,
+    "key": "F8"
+  },
+  "muteAllHotkey": {
+    "control": true,
+    "alt": false,
+    "shift": true,
+    "win": false,
+    "key": "F9"
+  },
+  "slots": [
+    {
+      "id": "sample-beep",
+      "name": "提示音",
+      "filePath": "samples/beep.wav",
+      "hotkey": {
+        "control": true,
+        "alt": true,
+        "shift": false,
+        "win": false,
+        "key": "F1"
+      },
+      "volume": 1.0,
+      "enabled": true,
+      "enableSpeedRamp": false,
+      "baseSpeed": 1.0,
+      "speedStep": 0.2,
+      "maxSpeed": 3.0,
+      "resetOnStop": true
+    },
+    {
+      "id": "sample-beep-alt",
+      "name": "提示音（侧键 + 加速）",
+      "filePath": "samples/beep.wav",
+      "hotkey": {
+        "control": false,
+        "alt": false,
+        "shift": false,
+        "win": false,
+        "key": "XButton1"
+      },
+      "volume": 0.7,
+      "enabled": true,
+      "enableSpeedRamp": true,
+      "baseSpeed": 1.0,
+      "speedStep": 0.2,
+      "maxSpeed": 3.0,
+      "resetOnStop": true
+    }
+  ]
+}

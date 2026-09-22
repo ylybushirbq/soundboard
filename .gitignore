@@ -1,0 +1,47 @@
+## Build
+bin/
+obj/
+out/
+publish/
+artifacts/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## Visual Studio / Rider / VS Code
+.vs/
+.idea/
+*.rsuser
+*.ssdk
+*.cache
+.vscode/*
+!.vscode/extensions.json
+
+## NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+## Test / coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+## User config (personal audio paths / hotkeys)
+config.json
+**/bin/**/config.json
+
+## Logs
+*.log
+agent-tools/

@@ -1,0 +1,23 @@
+# 音板 — 发布说明
+
+推荐产物：Windows x64 **单文件、自包含** `Soundboard.exe`（对方不必单独安装 .NET 运行时）。
+
+在仓库根目录执行：
+
+```bash
+dotnet publish src/Soundboard.App/Soundboard.App.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o ./publish
+```
+
+生成文件：`publish/Soundboard.exe`
+
+把该 exe 拷到任意目录即可。配置和导入的音频一律写在 **`%AppData%\Soundboard\`**（`config.json` + `library\`）。
+
+热键默认 **游戏模式**：只观察、不拦截（`GetAsyncKeyState` + Raw Input，不用 RegisterHotKey）。设置里可改成 **桌面模式**（键盘用 RegisterHotKey + MOD_NOREPEAT，注册在消息窗口上，藏到托盘后仍能收到；会抢走该组合键，适合日常切歌）。失败会提示「组合键已被占用」等中文原因。两种模式都不用 `WH_*` 低级钩子。堡垒之夜请用无边框窗口；桌面模式修不好 EAC 独占全屏。建议 Ctrl+Alt 组合，先开音板。槽位「每次变化」可填负数减速；全局热键「切换加速/减速」翻转步进正负号。
+
+工程已开启 `EnableWindowsTargeting`。在 Linux 上可以尝试同一条 `dotnet publish -r win-x64`；若交叉发布无法生成真正的 Windows 单文件 apphost，请在一台 Windows 电脑上执行上面的命令。
+
+已安装 .NET 8 桌面运行时、想要更小体积时，可改为：
+
+```bash
+dotnet publish src/Soundboard.App/Soundboard.App.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./publish-framework
+```
