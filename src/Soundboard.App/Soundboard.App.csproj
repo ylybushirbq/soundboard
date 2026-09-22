@@ -1,34 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    net8.0-windows is the WinForms tray app.
+    net8.0 compiles Domain/ only so tests can run on Linux without Microsoft.WindowsDesktop.App.
+  -->
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <IsWindowsApp Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">true</IsWindowsApp>
     <RootNamespace>Soundboard</RootNamespace>
     <AssemblyName>Soundboard</AssemblyName>
-    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Product>音板</Product>
     <AssemblyTitle>音板</AssemblyTitle>
     <Version>1.5.0</Version>
-    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <NeutralLanguage>zh-Hans</NeutralLanguage>
     <Description>独立运行的 Windows 托盘音板：游戏模式观察热键、桌面模式 RegisterHotKey，不注入游戏。</Description>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+  <PropertyGroup Condition="'$(IsWindowsApp)' == 'true'">
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsWindowsApp)' != 'true'">
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' AND '$(IsWindowsApp)' == 'true'">
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Soundboard.Core\Soundboard.Core.csproj" />
+  <ItemGroup Condition="'$(IsWindowsApp)' != 'true'">
+    <Compile Remove="Program.cs" />
+    <Compile Remove="GlobalUsings.cs" />
+    <Compile Remove="Audio\**\*.cs" />
+    <Compile Remove="Hotkeys\**\*.cs" />
+    <Compile Remove="Native\**\*.cs" />
+    <Compile Remove="Startup\**\*.cs" />
+    <Compile Remove="Ui\**\*.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(IsWindowsApp)' == 'true'">
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
   </ItemGroup>
@@ -36,7 +54,5 @@
   <ItemGroup>
     <None Include="Resources\app.ico" />
     <None Include="..\..\config.example.json" Link="config.example.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\..\samples\beep.wav" Link="samples\beep.wav" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\..\发布说明.txt" Link="发布说明.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

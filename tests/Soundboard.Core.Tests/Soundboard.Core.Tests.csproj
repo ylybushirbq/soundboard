@@ -15,7 +15,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Soundboard.Core\Soundboard.Core.csproj" />
+    <ProjectReference Include="..\..\src\Soundboard.App\Soundboard.App.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\config.example.json" CopyToOutputDirectory="PreserveNewest" />

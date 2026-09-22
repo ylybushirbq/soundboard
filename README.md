@@ -42,16 +42,31 @@ dotnet test tests/Soundboard.Core.Tests/Soundboard.Core.Tests.csproj -c Release
 
 ### 发布单文件 exe
 
+推荐产物：Windows x64 **单文件、自包含** `Soundboard.exe`（对方不必单独安装 .NET 运行时）。
+
+App 工程同时面向 `net8.0-windows`（托盘程序）和 `net8.0`（只编译领域代码，供无界面测试）。发布时指定 Windows 目标框架：
+
 ```bash
 dotnet publish src/Soundboard.App/Soundboard.App.csproj ^
-  -c Release -r win-x64 --self-contained true ^
+  -c Release -f net8.0-windows -r win-x64 --self-contained true ^
   -p:PublishSingleFile=true ^
   -p:IncludeNativeLibrariesForSelfExtract=true ^
   -p:EnableCompressionInSingleFile=true ^
   -o ./publish
 ```
 
-产物：`publish/Soundboard.exe`。详见 [`发布说明.txt`](发布说明.txt)。
+产物：`publish/Soundboard.exe`。把该 exe 拷到任意目录即可。配置和导入的音频一律写在 `%AppData%\Soundboard\`（`config.json` + `library\`）。
+
+工程已开启 `EnableWindowsTargeting`。在 Linux 上可以尝试同一条 `dotnet publish -f net8.0-windows -r win-x64`；若交叉发布无法生成真正的 Windows 单文件 apphost，请在一台 Windows 电脑上执行上面的命令。
+
+已安装 .NET 8 桌面运行时、想要更小体积时，可改为：
+
+```bash
+dotnet publish src/Soundboard.App/Soundboard.App.csproj ^
+  -c Release -f net8.0-windows -r win-x64 --self-contained false ^
+  -p:PublishSingleFile=true ^
+  -o ./publish-framework
+```
 
 ## 热键模式
 
@@ -136,12 +151,13 @@ dotnet publish src/Soundboard.App/Soundboard.App.csproj ^
 ## 项目结构
 
 ```
-src/Soundboard.Core/          配置、路径、速度变化、资料库（net8.0）
-src/Soundboard.App/           WinForms 托盘程序（net8.0-windows）
-tests/Soundboard.Core.Tests/  单元测试
+src/Soundboard.App/           WinForms 托盘程序（发布目标 net8.0-windows）
+  Domain/                     配置、路径、速度变化、资料库（命名空间 Soundboard.Core）
+tests/Soundboard.Core.Tests/  单元测试，引用 App 的 net8.0 输出
 config.example.json           示例配置
-发布说明.txt                  发布命令备忘
 ```
+
+同一 App 工程另有 `net8.0` 目标，只编译 `Domain/`，因此 Linux 上可以 `dotnet test` 而无需 Windows 桌面运行时。配置 JSON 形状与原来的 `Soundboard.Core` 类型一致。
 
 ## 许可与免责
 
